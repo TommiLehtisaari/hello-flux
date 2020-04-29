@@ -25,12 +25,12 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-        - name: nginx-static
-          image: tommilehtisaari/nginx-static:sha-9d103ba
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 80
-              protocol: TCP
+      - name: nginx-static
+        image: tommilehtisaari/nginx-static:sha-100e15c
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          protocol: TCP
 ---
 apiVersion: v1
 kind: Service
@@ -41,8 +41,8 @@ metadata:
   namespace: hello-flux
 spec:
   ports:
-    - port: 80
-      protocol: TCP
-      targetPort: 80
+  - port: 80
+    protocol: TCP
+    targetPort: 80
   selector:
     name: nginx-static
