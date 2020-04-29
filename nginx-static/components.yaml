@@ -1,0 +1,48 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hello-flux
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-static
+  namespace: hello-flux
+  labels:
+    name: nginx-static
+  annotations:
+    flux.weave.works/automated: true
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: nginx-static
+  template:
+    metadata:
+      labels:
+        name: nginx-static
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: nginx-static
+          image: tommilehtisaari/nginx-static:sha-9d103ba
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: nginx-static
+  name: nginx-static
+  namespace: hello-flux
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    name: nginx-static
